@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-[DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Ball ball;
@@ -13,6 +12,9 @@ public class GameManager : MonoBehaviour
     private int playerScore;
     private int computerScore;
 
+    public GameObject overUI;
+    public GameObject winUI;
+
     private void Start()
     {
         NewGame();
@@ -20,7 +22,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             NewGame();
         }
     }
@@ -50,13 +53,29 @@ public class GameManager : MonoBehaviour
     public void OnPlayerScored()
     {
         SetPlayerScore(playerScore + 1);
-        NewRound();
+        if (playerScore >= 5)
+        {
+            Time.timeScale = 0f;
+            winUI.SetActive(true);
+        }
+        else
+        {
+            NewRound();
+        }
     }
 
     public void OnComputerScored()
     {
         SetComputerScore(computerScore + 1);
-        NewRound();
+        if (computerScore >= 5)
+        {
+            Time.timeScale = 0f;
+            overUI.SetActive(true);
+        }
+        else
+        {
+            NewRound();
+        }
     }
 
     private void SetPlayerScore(int score)
@@ -70,5 +89,4 @@ public class GameManager : MonoBehaviour
         computerScore = score;
         computerScoreText.text = score.ToString();
     }
-
 }
